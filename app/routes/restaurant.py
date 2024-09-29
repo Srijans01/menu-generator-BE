@@ -120,7 +120,7 @@ async def delete_category(restaurant_id: str, menu_id: str, category_index: int)
     return {"message": "Category deleted successfully"}
 
 @router.get("/{restaurant_id}/menus/{menu_id}/generate_qr")
-async def generate_menu_qr(restaurant_id: str, menu_id: str):
+async def generate_menu_qr(restaurant_id: str, menu_id: str, request: Request):
     restaurant = await db.restaurants.find_one({"_id": ObjectId(restaurant_id)})
     if not restaurant:
         raise HTTPException(status_code=404, detail="Restaurant not found")
@@ -133,8 +133,11 @@ async def generate_menu_qr(restaurant_id: str, menu_id: str):
     pdf_file_path = f"{FILE_DIR}menu_{menu_id}.pdf"
     generate_menu_pdf(menu, pdf_file_path)
 
+    # Get the request's base URL
+    base_url = str(request.base_url).rstrip("/")
+
     # URL where the PDF will be served
-    pdf_url = f"http://127.0.0.1:8000/menus/{menu_id}/download_pdf"
+    pdf_url = f"{base_url}/menus/{menu_id}/download_pdf"
 
     # Generate the QR code linking to the PDF
     qr_file_path = f"{FILE_DIR}qr_{menu_id}.png"
@@ -143,5 +146,5 @@ async def generate_menu_qr(restaurant_id: str, menu_id: str):
     return {
         "message": "QR Code and PDF generated",
         "pdf_url": pdf_url,
-        "qr_code_url": f"http://127.0.0.1:8000/menus/{menu_id}/download_qr"
+        "qr_code_url": f"{base_url}/menus/{menu_id}/download_qr"
     }
