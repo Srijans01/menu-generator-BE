@@ -76,7 +76,7 @@ def generate_menu_pdf(menu_data, ad_data, file_path, welcome_text="Welcome to ou
 
     # Leave the first page with only the title
     c.showPage()  # New page after title
-    
+
     # If ad_data exists, render the ad on the second page
     if ad_data:
         c.setFont("Helvetica-Bold", 24)
@@ -173,7 +173,8 @@ async def get_next_ad():
     eligible_ad = None
 
     for ad in ads:
-        if ad['last_served'] is None or (current_time - ad['last_served']).total_seconds() >= ROTATION_PERIOD_SECONDS:
+        last_served = ad.get('last_served', None)
+        if last_served is None or (current_time - last_served).total_seconds() >= ROTATION_PERIOD_SECONDS:
             eligible_ad = ad
             break
     
