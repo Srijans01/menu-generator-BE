@@ -76,8 +76,9 @@ def generate_qr_code(url, file_path):
     img.save(file_path)
 
 # Endpoint to download the generated PDF
-@router.get("/menus/{menu_id}/download_pdf")
+@router.get("/{menu_id}/download_pdf")
 async def download_pdf(menu_id: str):
+    print(f"dpdf")
     pdf_file_path = f"{FILE_DIR}menu_{menu_id}.pdf"
     if not os.path.exists(pdf_file_path):
         raise HTTPException(status_code=404, detail="PDF not found")
