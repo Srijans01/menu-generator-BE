@@ -184,8 +184,14 @@ async def update_restaurant_name(restaurant_id: str, updated_data: dict):
     if not new_name:
         raise HTTPException(status_code=400, detail="New name is required")
 
+    # Ensure that restaurant_id is converted to ObjectId
+    try:
+        object_id = ObjectId(restaurant_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid restaurant ID")
+
     result = await db.restaurants.update_one(
-        {"_id": ObjectId(   )},
+        {"_id": object_id},
         {"$set": {"name": new_name}}
     )
 
