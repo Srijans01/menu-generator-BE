@@ -136,7 +136,7 @@ def generate_menu_pdf(menu_data, ad_data, file_path, welcome_text="Welcome to ou
 
             # Draw the dish name on the left and the price on the right
             c.drawString(padding, y_position, dish_name)
-            c.drawRightString(width - padding, y_position, f"Rs {dish_price:.2f}")
+            c.drawRightString(width - padding, y_position, f"{dish_price:.2f}")     #add rs symbol here before dish price
 
             # Optional: Draw separator line between dishes
             y_position -= 25
